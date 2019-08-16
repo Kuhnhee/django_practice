@@ -14,7 +14,7 @@ def artii(request):
     }
 
 
-    return render(request, 'artii.html', context)
+    return render(request, 'artii/artii.html', context)
 
 def artiiresult(request):
     text = request.GET.get('text')
@@ -28,4 +28,4 @@ def artiiresult(request):
     }
     
     # me = request.GET.get('me')
-    return render(request, 'artiiresult.html', context)
+    return render(request, 'artii/artiiresult.html', context)
