@@ -5,10 +5,10 @@
   <h1>여기는 인덱스입니다.</h1>
 
   {% for todo in todos%}
-    <li>{{todo.due_date}} : {{todo.title}}</li>
+    <li>{{ todo.due_date }} : {{ todo.title }}</li>
 
     <a href="{% url 'todos:edit' todo.id %}">수정</a>
-    <!-- <a href="{% url 'todos:delete' %}">삭제</a> -->
+    <a href="{% url 'todos:delete' todo.id %}">삭제</a>
 
   {% endfor %}
 

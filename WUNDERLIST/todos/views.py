@@ -7,7 +7,6 @@ def index(request):
     todos = Todo.objects.all()
     context = {
         'todos' : todos,
-
     }
 
     return render(request, 'todos/index.html', context)
@@ -44,5 +43,9 @@ def update(request, pk):
     return redirect('todos:index')
 
 
-def delete(request):
-    pass
+def delete(request, pk):
+
+    todo = Todo.objects.get(id=pk)
+    todo.delete()
+    
+    return redirect('todos:index')
