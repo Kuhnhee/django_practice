@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+  <h1>새글쓰기</h1>
+
+  <form action="{% url 'posts:create' %}" method="GET">
+    <div class="form-group">
+      <label for="title">제목</label>
+      <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력">
+      <label for="content">내용</label>
+      <textarea id="content" name="content" class="form-control" rows="10"></textarea>
+      <label for="image_url">이미지 URL</label>
+      <input type="text" class="form-control" id="image_url" name="image_url" placeholder="사진url을 입력">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+{% endblock %}
