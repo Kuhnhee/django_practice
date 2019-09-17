@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<form action="{% url 'pages:create' %}" method="GET">
+  <div class="form-group">
+    <label for="title">제목</label>
+    <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력">
+
+    <label for="title_en">내용</label>
+    <input type="textarea" class="form-control" id="contents" name="contents" placeholder="영문 제목을 입력">
+
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+
+{% endblock %}

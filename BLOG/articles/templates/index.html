@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <h1>당신이 여지껏 작성한 내용들입니다.</h1>
+  <hr>
+  {% for article in articles %}
+    제목: {{article.title}} <br>
+    내용: {{article.content}} <br>
+    <p>이미지: <img src="{{ article.image_url }}" alt=""/></p>
+    작성시간: {{article.created_at}}
+    <hr>
+  {% endfor %}
+</body>
+</html>

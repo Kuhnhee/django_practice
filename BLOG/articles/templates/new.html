@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <h1>제목과 내용을 입력하세요</h1>
+  <form action="/articles/create/" method="GET">
+    <div>
+      제목: <input type="text" name="title">
+    </div>
+    <div>
+      이미지: <input type="text" name="image_url">
+    </div>
+    <div>
+      내용:
+      <textarea rows="5" cols="40" name="content">
+      </textarea>
+      <button type="submit">작성!</button>
+    </div>
+  </form>
+</body>
+</html>
