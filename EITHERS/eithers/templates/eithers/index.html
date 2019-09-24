@@ -1,0 +1,16 @@
+{% extends 'eithers/base.html' %}
+
+{% block body %}
+
+<h1>INDEX</h1>
+
+<ul>
+  {% for question in questions %}
+  <li><a href="/eithers/{{ question.id }}">{{question.title}}</a></li>
+  {% endfor %}
+</ul>
+
+<a href="random/" class="btn btn-primary">랜덤문제</a>
+<a href="clean/" class="btn btn-danger">전체삭제</a>
+
+{% endblock %}

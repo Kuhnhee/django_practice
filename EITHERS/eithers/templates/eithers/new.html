@@ -1,0 +1,48 @@
+{% extends 'eithers/base.html' %}
+
+{% block body %}
+
+<div class="container">
+  <h1>새글쓰기</h1>
+
+  <form action="{% url 'eithers:new' %}" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      {% csrf_token %}
+      <label for="title">제목</label>
+      <input type="text" class="form-control" id="title" name="title" maxlength="30" value="대결!"
+        style="width:300px;">
+
+      <hr>
+
+      <div style="display:flex; justify-content:space-around">
+          
+        <div>
+          <label for="content">내용1</label>
+          <textarea id="issue_a" name="issue_a" class="form-control" rows="1" maxlength="30"
+            style="width:300px;"></textarea>
+          이미지1:
+          <input type="file" name="image_a" accept="image/*">
+          <!--image일 경우 다(*) 받아라~ 선택 목록을 filtering-->
+        </div>
+
+        <h2 class="my-3">VS</h2>
+
+        <div>
+          <label for="content">내용2</label>
+          <textarea id="issue_b" name="issue_b" class="form-control" rows="1" maxlength="30"
+            style="width:300px;"></textarea>
+          이미지2:
+          <input type="file" name="image_b" accept="image/*">
+        </div>
+      </div>
+
+    </div>
+    <hr>
+    <button type="submit" class="btn btn-primary">완료</button>
+  </form>
+
+</div>
+
+
+
+{% endblock %}
