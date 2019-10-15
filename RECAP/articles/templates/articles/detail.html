@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+  <div class="container">
+    
+      <h1>상세 페이지</h1>
+      <p>번호: {{ article.pk }}</p>
+      <p>제목: {{ article.title }}</p>
+      <p>내용: {{ article.content }}</p>
+      <p>생성 일자: {{ article.created_at|date:"SHORT_DATE_FORMAT"}}</p>
+      <p>수정 일자: {{ article.updated_at }}</p>
+    
+      <a href="{% url 'articles:index' %}">목록보기</a>
+      <a href="{% url 'articles:update' article.pk %}"> 수정하기 </a>
+    
+      <form action="{% url 'articles:delete' article.pk %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="삭제">
+      </form>
+      <!-- <a href="{% url 'articles:delete' article.pk %}"> 삭제하기 </a> -->
+    
+      <hr>
+      <form action="{% url 'articles:commentCreate' article.pk %}" method="POST">
+        {% csrf_token %}
+        <!-- {% bootstrap_form form exclude='article' %} -->
+        {% bootstrap_form form %}
+        <input type="submit" value="댓글 달기">
+      </form>
+
+      <hr>
+
+      <p><i>{{ comments | length }} 개의 댓글이 있습니다.</i></p>
+      {% for comment in comments %}
+        <p>
+          {{ comment.content }}({{ comment.pk }})
+
+          <form action="{% url 'articles:commentDelete' article.pk comment.pk %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="댓글 삭제">
+          </form>
+
+        </p>
+      {% empty %}
+        <p>아직 댓글이 없습니다.</p>
+      {% endfor %}
+
+  </div>
+
+
+{% endblock %}

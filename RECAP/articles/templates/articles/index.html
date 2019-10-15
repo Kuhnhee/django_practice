@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+<h1>Articles</h1>
+<a href="{% url 'articles:create' %}">새글쓰기</a>
+
+<!-- 모든 Article 들을 보여줌 -->
+{% for article in articles %}
+  <p>{{ article.pk }}</p>
+  <p>{{ article.title }}</p>
+
+  <a href="{{ article.get_absolute_url }}"> 상세보기 </a>
+  <a href="{% url 'articles:update' article.pk %}"> 수정하기 </a>
+  <!-- <a href="{% url 'articles:delete' article.pk %}"> 삭제하기 </a> -->
+  <form action="{% url 'articles:delete' article.pk %}" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="삭제">
+  </form>
+
+  
+{% endfor %}
+
+
+
+
+{% endblock %}
