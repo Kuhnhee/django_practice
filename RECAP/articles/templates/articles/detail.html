@@ -8,19 +8,38 @@
       <p>번호: {{ article.pk }}</p>
       <p>제목: {{ article.title }}</p>
       <p>내용: {{ article.content }}</p>
+      <p>작성자: {{ article.user.first_name }}</p>
       <p>생성 일자: {{ article.created_at|date:"SHORT_DATE_FORMAT"}}</p>
       <p>수정 일자: {{ article.updated_at }}</p>
     
       <a href="{% url 'articles:index' %}">목록보기</a>
+      {% if article.user == request.user %}
       <a href="{% url 'articles:update' article.pk %}"> 수정하기 </a>
-    
       <form action="{% url 'articles:delete' article.pk %}" method="POST">
         {% csrf_token %}
         <input type="submit" value="삭제">
       </form>
+      {% endif %}
       <!-- <a href="{% url 'articles:delete' article.pk %}"> 삭제하기 </a> -->
     
       <hr>
+
+      {% if request.user in article.like_users.all %}
+        <a href="{% url 'articles:like_cancel' article.pk %}">좋아요 취소</a>
+      {% else %}
+        <a href="{% url 'articles:like' article.pk %}">좋아요</a>
+      {% endif %}
+      
+      <p>좋아요: {{ article.like_users.count }}</p>
+      <p>좋아요 목록:</p>
+      <ul>
+      {% for u in article.like_users.all %}
+        <li>{{ u }}</li>
+      {% endfor %}
+      </ul>
+
+      <hr>
+
       <form action="{% url 'articles:commentCreate' article.pk %}" method="POST">
         {% csrf_token %}
         <!-- {% bootstrap_form form exclude='article' %} -->
@@ -33,12 +52,14 @@
       <p><i>{{ comments | length }} 개의 댓글이 있습니다.</i></p>
       {% for comment in comments %}
         <p>
-          {{ comment.content }}({{ comment.pk }})
+          {{ comment.content }}({{ comment.pk }}) by {{ comment.user.first_name }}
 
+          {% if comment.user == request.user %}
           <form action="{% url 'articles:commentDelete' article.pk comment.pk %}" method="POST">
             {% csrf_token %}
             <input type="submit" value="댓글 삭제">
           </form>
+          {% endif %}
 
         </p>
       {% empty %}

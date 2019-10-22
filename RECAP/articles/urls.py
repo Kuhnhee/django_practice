@@ -12,4 +12,10 @@ urlpatterns = [
 
     path('<int:article_pk>/comments', views.commentCreate, name='commentCreate'),
     path('<int:article_pk>/comments_delete/<int:comment_id>', views.commentDelete, name='commentDelete'),
+
+    path('send_cookie/', views.send_cookie, name="send"),
+
+    path('<int:article_pk>/like/', views.like, name='like'),
+    path('<int:article_pk>/like_cancel/', views.like_cancel, name='like_cancel'),
 ]
+

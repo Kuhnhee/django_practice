@@ -31,9 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'articles',
+    'accounts',
     'django_extensions',
     'bootstrap4',
-    'articles',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -121,3 +122,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# login 주소를 default와 다르게 하고 싶은 경우 사용...
+# LOGIN_URL = '/accounts/log_in/'
+
+# AUTH_USER_MODEL = 'auth.User' # 가 default 값

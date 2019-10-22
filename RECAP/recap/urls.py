@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls), #return 값은 URLPattern의 instamce
     path('articles/', include('articles.urls')),
+    path('accounts/', include('accounts.urls')),
 ]
