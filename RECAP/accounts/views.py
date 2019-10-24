@@ -2,14 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
-from IPython import embed
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import get_user_model
 
 from django.views.decorators.http import require_POST
-from .forms import CustomUserChangeForm, CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import update_session_auth_hash
 
-from django.contrib.auth import get_user_model
+from IPython import embed
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 # Create your views here.
 def signup(request):
