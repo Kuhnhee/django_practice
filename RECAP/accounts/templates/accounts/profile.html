@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block body %}
+<h1>Profile page of {{ person }}</h1>
+
+{% if request.user != person %}
+  {% if request.user in person.followers.all %}
+    <a class="btn btn-outline-primary" href="{% url 'accounts:follow' person.pk %}">Unfollow</a>
+  {% else %}
+    <a class="btn btn-primary" href="{% url 'accounts:follow' person.pk %}">Follow</a>
+  {% endif %}
+{% endif %}
+
+<p>팔로워수: {{ person.followers.count }}</p>
+<!-- <p>팔로워수: {{ person.followers.all|length }}</p> -->
+<p>
+  팔로워 명단:
+  {% with followers=person.followers.all followings=person.followings.all %}
+    {% for follower in followers %}
+      {{ follower }},
+    {% endfor %}
+</p>
+
+<p>팔로우수: {{ person.followings.count }}</p>
+<p>
+  팔로우 명단:
+    {% for following in followings %}
+      {{ following }},
+    {% endfor %}
+  {% endwith %}
+</p>
+
+<hr>
+
+<h2>{{ person }}가 쓴 글 목록</h2>
+{% with articles=person.article_set.all %}
+  {% for article in articles %}
+    <p>
+      제목: {{ article.title }} | 
+      좋아요: {{ article.like_users.count }} | 
+      댓글: {{ article.comment_set.count }}
+    </p>
+  {% endfor %}
+{% endwith %}
+
+{% endblock %}

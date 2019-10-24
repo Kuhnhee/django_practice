@@ -127,3 +127,4 @@ STATIC_URL = '/static/'
 # LOGIN_URL = '/accounts/log_in/'
 
 # AUTH_USER_MODEL = 'auth.User' # 가 default 값
+AUTH_USER_MODEL = 'accounts.User'

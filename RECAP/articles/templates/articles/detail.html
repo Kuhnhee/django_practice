@@ -8,7 +8,7 @@
       <p>번호: {{ article.pk }}</p>
       <p>제목: {{ article.title }}</p>
       <p>내용: {{ article.content }}</p>
-      <p>작성자: {{ article.user.first_name }}</p>
+      <p>작성자: {{ article.user }}</p>
       <p>생성 일자: {{ article.created_at|date:"SHORT_DATE_FORMAT"}}</p>
       <p>수정 일자: {{ article.updated_at }}</p>
     
@@ -24,8 +24,19 @@
     
       <hr>
 
+      <h2>해시태그 목록</h2>
+      <p>
+        {% with hashtags=article.hashtags.all %}
+        {% for hashtag in hashtags %}
+        <strong>{{ hashtag }}</strong>
+        {% endfor %}
+        {% endwith %}
+      </p>
+
+      <hr>
+
       {% if request.user in article.like_users.all %}
-        <a href="{% url 'articles:like_cancel' article.pk %}">좋아요 취소</a>
+        <a href="{% url 'articles:like' article.pk %}">좋아요 취소</a>
       {% else %}
         <a href="{% url 'articles:like' article.pk %}">좋아요</a>
       {% endif %}
@@ -33,9 +44,11 @@
       <p>좋아요: {{ article.like_users.count }}</p>
       <p>좋아요 목록:</p>
       <ul>
-      {% for u in article.like_users.all %}
-        <li>{{ u }}</li>
-      {% endfor %}
+        {% with likers=article.like_users.all %}
+          {% for u in likers %}
+            <li>{{ u }}</li>
+          {% endfor %}
+        {% endwith %}
       </ul>
 
       <hr>

@@ -83,13 +83,13 @@ class CommentForm(forms.ModelForm):
         # fields = '__all__'
         fields = ('content',)
 
-    content = forms.CharField(
-        max_length=20,
-        label='댓글',
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control my-content',
-                'placeholder': '댓글 내용을 입력하세요',
-            }
-        )
-    )
+    # content = forms.CharField(
+    #     max_length=20,
+    #     label='댓글',
+    #     widget=forms.TextInput(
+    #         attrs={
+    #             'class': 'form-control my-content',
+    #             'placeholder': '댓글 내용을 입력하세요',
+    #         }
+    #     )
+    # )

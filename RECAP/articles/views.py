@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Article, Comment
+from .models import Article, Comment, Hashtag
 from .forms import ArticleForm, CommentForm
 
 from IPython import embed #디버깅 용도. interative shell 튀어나온다
@@ -8,18 +8,31 @@ from django.http import Http404, HttpResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 
+from itertools import chain
+
+
 # Create your views here.
+@login_required
 def index(request):
     # embed()
     visits_num = request.session.get('visits', 0) #key, value를 세션에 직접 기록
     request.session['visits'] = visits_num + 1
     request.session.modified = True
     # embed()
-    articles = Article.objects.all() # Article 모델 내의 모든 data를 가져옴
+    followings = request.user.followings.all()
+    articles = Article.objects.filter(user__in=followings)
+    my_articles = request.user.article_set.all()
     context = {
-        'articles': articles,
-        'visits': visits_num
+        'articles': articles | my_articles,
+        'visits': visits_num,
     }
+    # followings = request.user.followings.all()
+    # followings = chain(followings, [request.user])
+    # articles = Article.objects.filter(user__in=followings)
+    # context = {
+    #     'articles': articles,
+    #     'visits': visits_num,
+    # }
     return render(request, 'articles/index.html', context) # 어떤 templates를 불러올 것인지
 
 
@@ -85,6 +98,15 @@ def create(request):
             article = form.save(commit=False)
             article.user = request.user
             article.save()
+
+            # hashtag 찾아서 저장하기
+            for word in article.content.split():
+                if word.startswith('#'):
+                    #가져 오던가, 없으면 만들어라. (get()과 create())
+                    #hashtag 결과값(객체), created(boolean): 새로 만들어진거면 True 
+                    hashtag, created = Hashtag.objects.get_or_create(content=word)
+                    article.hashtags.add(hashtag)
+
             return redirect(article) # get_absolute_url을 지정하면 해당 객체만 넣어도 redirect가 된다.
         else: # 유효하지 않다면
             return redirect('articles:create')
@@ -219,11 +241,40 @@ def like(request, article_pk):
     # article_pk로 넘어온 글의 like_users에 현재 접속중인 유저를 추가한다.
     # request.user.like_articles.add(Article.objects.get(pk=article_pk))
     article = Article.objects.get(pk=article_pk)
-    article.like_users.add(request.user) # request.user.like_articles.add(article) 과 동일한 작업 수행
+    user = request.user
+    # 만약 좋아요 리스트에 현재 접속중인 유저가 있다면,
+    # -> 해당 유저는 좋아요를 했다.
+    # .filter()는 찾고자 하는게 없을 경우 빈 쿼리셋 반환 (.get()은 에러 반환)
+    if article.like_users.filter(pk=user.pk).exists():
+        article.like_users.remove(user)
+    #아니면,
+    # -> 해당 유저는 좋아요를 했다.
+    else:
+        article.like_users.add(user) # request.user.like_articles.add(article) 과 동일한 작업 수행
     return redirect(article)
 
 
-def like_cancel(request, article_pk):
-    article = Article.objects.get(pk=article_pk)
-    article.like_users.remove(request.user)
-    return redirect(article)
+def explore(request):
+    articles = Article.objects.all()
+    context = {
+        'context': articles,
+    }
+    return render(request, 'articles/explore.html', context)
+
+
+def tags(request):
+    tags = Hashtag.objects.all()
+    context = {
+        'tags': tags,
+    }
+    return render(request, 'articles/tags.html', context)
+
+
+def hashtag(request, hashtag_pk):
+    hashtag = get_object_or_404(Hashtag, pk=hashtag_pk)
+    articles = hashtag.article_set.all() #related_name을 정의하지 않았는데, 자동으로 이렇게 설정됨
+    context = {
+        'hashtag': hashtag,
+        'articles': articles,
+    }
+    return render(request, 'articles/hashtag.html', context)

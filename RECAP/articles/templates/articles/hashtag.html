@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h1>{{ hashtag.content }}</h1>
+<ul>
+  {% for article in articles %}
+    <li>
+      <p>제목: {{ article.title }}</p>
+      <p>내용: {{ article.content }}</p>
+      <p>좋아요: {{ article.like_users.count }}</p>
+      <p>댓글: {{ article.comment_set.count }}</p>
+    </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
