@@ -3,7 +3,7 @@ from .models import Article, Comment, Hashtag
 from .forms import ArticleForm, CommentForm
 
 from IPython import embed #디버깅 용도. interative shell 튀어나온다
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
@@ -247,11 +247,20 @@ def like(request, article_pk):
     # .filter()는 찾고자 하는게 없을 경우 빈 쿼리셋 반환 (.get()은 에러 반환)
     if article.like_users.filter(pk=user.pk).exists():
         article.like_users.remove(user)
+        liked = False
     #아니면,
     # -> 해당 유저는 좋아요를 했다.
     else:
         article.like_users.add(user) # request.user.like_articles.add(article) 과 동일한 작업 수행
-    return redirect(article)
+        liked = True
+    # return redirect(article)
+    print(article.like_users.all())
+    context = {
+        'liked': liked,
+        'count': article.like_users.count(),
+        # 'likers': list(article.like_users.all()),
+    }
+    return JsonResponse(context)
 
 
 def explore(request):
